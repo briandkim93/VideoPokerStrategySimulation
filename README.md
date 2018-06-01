@@ -1,0 +1,9 @@
+Jacks or better video poker is a derivative of 5-card draw. A player is initially dealt 5 cards from a standard 52-card deck. The player is then alloted one round to discard anywhere between 0 to 5 cards in their hand and draw the same number of new cards from the remaining cards in the deck. The resulting 5-card hand is the deciding factor in the player's received payout, if any. The lowest possible payout is 1-to-1, which results from a single pair of high cards (i.e. 2 Jacks, 2 Queens, 2 Kings, or 2 Aces).
+
+9/6 jacks or better video poker is considered to be one of the best paying casino games available. 9/6 refers to the pay table that correlates to receiving a 9-to-1 payout for a full house and a 6-to-1 payout for a flush.
+
+There is an article found on Wizard of Odds written by Michael Shackleford (https://wizardofodds.com/games/video-poker/strategy/jacks-or-better/9-6/simple/) that describes a simple strategy supposedly resulting in an expected return of 99.46%. This simple strategy is a subset of a much more complicated strategy developed by the same author (https://wizardofodds.com/games/video-poker/strategy/jacks-or-better/9-6/optimal/) that instead results in an expected return of 99.54%. The cost of using the simple strategy is 0.08%, but is much more feasible to use in a real-world environment. 
+
+This demonstration seeks to test Shackleford's simple strategy by simulating the use of his algorithm over multiple iterations in accordance to the law of large numbers.
+
+The pay table that is used in this simulation can be found on Casino News Daily (http://www.casinonewsdaily.com/video-poker-guide/pay-charts-video-poker/). Because the payout for a royal flush is disproportionately higher when betting 5 coins, the simulation will use the 5-coin pay scale.
