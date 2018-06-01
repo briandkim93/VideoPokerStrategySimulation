@@ -45,7 +45,33 @@ function checkDiscardable(hand) {
 
 function checkHand(hand) {
     var handResult = '';
-    // ADDITIONAL CODE REQUIRED
+    if (checkHighPair(hand)) {
+        handResult = 'highPair';
+    }
+    if (checkTwoPair(hand)) {
+        handResult = 'twoPair';
+    }
+    if (checkThreeOfAKind(hand)) {
+        handResult = 'threeOfAKind';
+    }
+    if (checkStraight(hand)) {
+        handResult = 'straight';
+    }
+    if (checkFlush(hand)) {
+        handResult = 'flush';
+    }
+    if (checkFullHouse(hand)) {
+        handResult = 'fullHouse';
+    }
+    if (checkFourOfAKind(hand)) {
+        handResult = 'fourOfAKind';
+    }
+    if (checkStraightFlush(hand)) {
+        handResult = 'straightFlush';
+    }
+    if (checkRoyalFlush(hand)) {
+        handResult = 'royalFlush';
+    }       
     if (fiveCoinPayScale[handResult]) {
         return fiveCoinPayScale[handResult];
     } else {
@@ -68,7 +94,7 @@ const fiveCoinPayScale = {
 function playGame(balance) {
     const newDeck = [];
     const newHand = [];
-    const payout = 0;
+    var payout = 0;
 
     buildDeck(newDeck);
     shuffleDeck(newDeck);
@@ -76,18 +102,99 @@ function playGame(balance) {
     const cardsToDiscard = checkDiscardable(newHand);
     draw(newDeck, newHand, cardsToDiscard);
     payout = checkHand(newHand);
-    balance += payout;
+    return payout;
 }
 
 function simulation(n) {
-    var balance = 0;
+    var simulationBalance = 0;
+    var singlePayout = 0;
     var payoutPercentage;
     var coinsSpent = (n * 5);
 
     for (let i = 0; i < n; i += 1) {
-        balance -= 5;
-        playGame(balance);
+        simulationBalance -= 5;
+        singlePayout = playGame(simulationBalance);
+        simulationBalance += singlePayout;
     }
-    payoutPercentage = (balance + coinsSpent) / (coinsSpent) * 100;
+    payoutPercentage = (simulationBalance + coinsSpent) / (coinsSpent) * 100;
     return payoutPercentage + '%';
+}
+
+function checkHighPair(hand) {
+    // ADDITIONAL CODE REQUIRED
+    return;
+}
+
+function checkTwoPair(hand) {
+    // ADDITIONAL CODE REQUIRED
+    return;
+}
+
+function checkThreeOfAKind(hand) {
+    // ADDITIONAL CODE REQUIRED
+    return;
+}
+
+function checkStraight(hand) {
+    var handNumbers = hand.map(card => card.number);
+    handNumbers.sort();
+    if (checkRoyalStraight(hand)) {
+        return true;
+    }
+    for (let i = 0; i < 4; i += 1) {
+        if (handNumbers[i] + 1 == handNumbers[i + 1]) {
+            continue;
+        } else {
+            return false;
+        }
+    }
+    return true;
+}
+function checkRoyalStraight(hand) {
+    var handNumbers = hand.map(card => card.number);
+    handNumbers.sort();
+    var handNumbersString = handNumbers.join();
+    if (handNumbersString === '1,10,11,12,13') {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function checkFlush(hand) {
+    const handSuits = hand.map(card => card.suit);
+    if (handSuits.every(function(suit) { return suit === 'C'; }) ||
+        handSuits.every(function(suit) { return suit === 'D'; }) ||
+        handSuits.every(function(suit) { return suit === 'H'; }) ||
+        handSuits.every(function(suit) { return suit === 'S'; })) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function checkFullHouse(hand) {
+    // ADDITIONAL CODE REQUIRED
+    return;
+}
+
+function checkFourOfAKind(hand) {
+    // ADDITIONAL CODE REQUIRED
+    return;
+}
+
+function checkStraightFlush(hand) {
+    if (checkStraight(hand) && checkFlush(hand)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function checkRoyalFlush(hand) {
+    if (checkRoyalStraight(hand) && checkFlush(hand)) {
+        return true;
+    } else {
+        return false;
+    }
 }
