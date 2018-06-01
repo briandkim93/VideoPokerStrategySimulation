@@ -36,3 +36,58 @@ function draw(deck, hand, discardIndexes) {
         hand.push(deck.shift());
     }
 }
+
+function checkDiscardable(hand) {
+    const discardIndexes = [];
+    // ADDITIONAL CODE REQUIRED
+    return discardIndexes; 
+}
+
+function checkHand(hand) {
+    var handResult = '';
+    // ADDITIONAL CODE REQUIRED
+    if (fiveCoinPayScale[handResult]) {
+        return fiveCoinPayScale[handResult];
+    } else {
+        return 0;
+    }
+}
+
+const fiveCoinPayScale = {
+    highPair: 5,
+    twoPair: 10,
+    threeOfAKind: 15,
+    straight: 20,
+    flush: 30,
+    fullHouse: 45,
+    fourOfAKind: 125,
+    straightFlush: 250,
+    royalFlush: 4000
+};
+
+function playGame(balance) {
+    const newDeck = [];
+    const newHand = [];
+    const payout = 0;
+
+    buildDeck(newDeck);
+    shuffleDeck(newDeck);
+    deal(newDeck, newHand);
+    const cardsToDiscard = checkDiscardable(newHand);
+    draw(newDeck, newHand, cardsToDiscard);
+    payout = checkHand(newHand);
+    balance += payout;
+}
+
+function simulation(n) {
+    var balance = 0;
+    var payoutPercentage;
+    var coinsSpent = (n * 5);
+
+    for (let i = 0; i < n; i += 1) {
+        balance -= 5;
+        playGame(balance);
+    }
+    payoutPercentage = (balance + coinsSpent) / (coinsSpent) * 100;
+    return payoutPercentage + '%';
+}
