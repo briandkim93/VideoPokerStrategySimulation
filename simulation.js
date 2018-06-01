@@ -26,9 +26,9 @@ function deal(deck, hand) {
         hand.push(deck.shift());
     }
 };
-
+    
 function draw(deck, hand, discardIndexes) {
-    discardIndexes.sort(function(a, b) {return (b-a)});
+    discardIndexes.sort((a, b) => b - a);
     for (let index of discardIndexes) {
         hand.splice(index, 1);
     }
@@ -121,23 +121,44 @@ function simulation(n) {
 }
 
 function checkHighPair(hand) {
-    // ADDITIONAL CODE REQUIRED
-    return;
+    const handNumbers = hand.map(card => card.number);
+    const numberCountArray = numberCounter(handNumbers);
+    if (numberCountArray.filter(function(count){return count === 2}).length === 1) {
+        const handNumbersString = handNumbers.toString();
+        if (handNumbersString.includes('1,1') ||
+            handNumbersString.includes('11,11') ||
+            handNumbersString.includes('12,12') ||
+            handNumbersString.includes('13,13')) {
+            return true;
+        }
+    } else {
+        return false;
+    }
 }
 
 function checkTwoPair(hand) {
-    // ADDITIONAL CODE REQUIRED
-    return;
+    const handNumbers = hand.map(card => card.number);
+    const numberCountArray = numberCounter(handNumbers);
+    if (numberCountArray.filter(function(count){return count === 2}).length === 2) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 function checkThreeOfAKind(hand) {
-    // ADDITIONAL CODE REQUIRED
-    return;
+    const handNumbers = hand.map(card => card.number);
+    const numberCountArray = numberCounter(handNumbers);
+    if (numberCountArray.filter(function(count){return count === 3}).length) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 function checkStraight(hand) {
-    var handNumbers = hand.map(card => card.number);
-    handNumbers.sort();
+    const handNumbers = hand.map(card => card.number);
+    handNumbers.sort((a, b) => a - b);
     if (checkRoyalStraight(hand)) {
         return true;
     }
@@ -151,9 +172,9 @@ function checkStraight(hand) {
     return true;
 }
 function checkRoyalStraight(hand) {
-    var handNumbers = hand.map(card => card.number);
-    handNumbers.sort();
-    var handNumbersString = handNumbers.join();
+    const handNumbers = hand.map(card => card.number);
+    handNumbers.sort((a, b) => a - b);
+    const handNumbersString = handNumbers.toString();
     if (handNumbersString === '1,10,11,12,13') {
         return true;
     } else {
@@ -163,10 +184,10 @@ function checkRoyalStraight(hand) {
 
 function checkFlush(hand) {
     const handSuits = hand.map(card => card.suit);
-    if (handSuits.every(function(suit) { return suit === 'C'; }) ||
-        handSuits.every(function(suit) { return suit === 'D'; }) ||
-        handSuits.every(function(suit) { return suit === 'H'; }) ||
-        handSuits.every(function(suit) { return suit === 'S'; })) {
+    if (handSuits.every(function(suit){return suit === 'C'}) ||
+        handSuits.every(function(suit){return suit === 'D'}) ||
+        handSuits.every(function(suit){return suit === 'H'}) ||
+        handSuits.every(function(suit){return suit === 'S'})) {
         return true;
     } else {
         return false;
@@ -174,13 +195,25 @@ function checkFlush(hand) {
 }
 
 function checkFullHouse(hand) {
-    // ADDITIONAL CODE REQUIRED
+    const handNumbers = hand.map(card => card.number);
+    const numberCountArray = numberCounter(handNumbers);
+    if (numberCountArray.filter(function(count){return count === 2}).length &&
+        numberCountArray.filter(function(count){return count === 3}).length) {
+        return true;
+    } else {
+        return false;
+    }
     return;
 }
 
 function checkFourOfAKind(hand) {
-    // ADDITIONAL CODE REQUIRED
-    return;
+    const handNumbers = hand.map(card => card.number);
+    const numberCountArray = numberCounter(handNumbers);
+    if (numberCountArray.filter(function(count){return count === 4}).length) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 function checkStraightFlush(hand) {
@@ -197,4 +230,13 @@ function checkRoyalFlush(hand) {
     } else {
         return false;
     }
+}
+
+function numberCounter(handNumbers) {
+    handNumbers.sort((a, b) => a - b);
+    const numberCountObject = {};
+    for (let i = 0; i < 5; i += 1) {
+        numberCountObject[handNumbers[i]] = (numberCountObject[handNumbers[i]] || 0) + 1;
+    }
+    return Object.values(numberCountObject);
 }
