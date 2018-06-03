@@ -61,6 +61,9 @@ function holdStrategy(hand) {
     if (checkNine(hand)) {
         return checkNine(hand);
     }
+    if (checkTen(hand)) {
+        return checkTen(hand);
+    }
     return [];
 }
 
@@ -276,6 +279,14 @@ function checkNine(hand) {
     }
 }
 
+function checkTen(hand) {
+    if (checkFourToOutsideStraight(hand)) {
+        return checkFourToOutsideStraight(hand);
+    } else {
+        return false;
+    }
+}
+
 function checkLowPair(hand) {
     const handNumbers = hand.map(card => card.number);
     const elementCountArray = Object.values(elementCounter(handNumbers));
@@ -323,6 +334,22 @@ function checkThreeOfAKind(hand) {
     const elementCountArray = Object.values(elementCounter(handNumbers));
     if (elementCountArray.filter(function(count){return count === 3}).length) {
         return true;
+    } else {
+        return false;
+    }
+}
+
+function checkFourToOutsideStraight(hand) {
+    const firstFour = sortHand(hand).slice();
+    firstFour.pop();
+
+    const lastFour = sortHand(hand).slice();
+    lastFour.shift();
+
+    if (checkStraight(firstFour)) {
+        return firstFour;
+    } else if (checkStraight(lastFour)) {
+        return lastFour;
     } else {
         return false;
     }
@@ -437,4 +464,9 @@ function intersection(array1, array2) {
         }
     }
     return intersectionArray;
+}
+
+function sortHand(hand) {
+    hand.sort((a, b) => a.number - b.number);
+    return hand;
 }
