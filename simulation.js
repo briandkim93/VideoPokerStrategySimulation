@@ -81,7 +81,7 @@ function holdStrategy(hand) {
     }
 }
 
-function checkHand(hand) {
+function checkHand(hand, coin) {
     var handResult = '';
     if (checkHighPair(hand)) {
         handResult = 'highPair';
@@ -110,26 +110,92 @@ function checkHand(hand) {
     if (checkRoyalFlush(hand)) {
         handResult = 'royalFlush';
     }       
-    if (fiveCoinPayScale[handResult]) {
-        return fiveCoinPayScale[handResult];
+    if (choosePayScale(coin)[handResult]) {
+        return choosePayScale(coin)[handResult];
     } else {
         return 0;
     }
 }
 
-const fiveCoinPayScale = {
-    highPair: 5,
-    twoPair: 10,
-    threeOfAKind: 15,
-    straight: 20,
-    flush: 30,
-    fullHouse: 45,
-    fourOfAKind: 125,
-    straightFlush: 250,
-    royalFlush: 4000
-};
+function choosePayScale(coin) {
+    const oneCoinPayScale = {
+    highPair: 1,
+    twoPair: 2,
+    threeOfAKind: 3,
+    straight: 4,
+    flush: 6,
+    fullHouse: 9,
+    fourOfAKind: 25,
+    straightFlush: 50,
+    royalFlush: 250
+    };
 
-function playGame(balance) {
+    const twoCoinPayScale = {
+        highPair: 2,
+        twoPair: 4,
+        threeOfAKind: 6,
+        straight: 8,
+        flush: 12,
+        fullHouse: 18,
+        fourOfAKind: 50,
+        straightFlush: 100,
+        royalFlush: 500
+    };
+
+    const threeCoinPayScale = {
+        highPair: 3,
+        twoPair: 6,
+        threeOfAKind: 9,
+        straight: 12,
+        flush: 18,
+        fullHouse: 27,
+        fourOfAKind: 75,
+        straightFlush: 150,
+        royalFlush: 750
+    };
+
+    const fourCoinPayScale = {
+        highPair: 4,
+        twoPair: 8,
+        threeOfAKind: 12,
+        straight: 16,
+        flush: 24,
+        fullHouse: 36,
+        fourOfAKind: 100,
+        straightFlush: 200,
+        royalFlush: 1000
+    };
+
+    const fiveCoinPayScale = {
+        highPair: 5,
+        twoPair: 10,
+        threeOfAKind: 15,
+        straight: 20,
+        flush: 30,
+        fullHouse: 45,
+        fourOfAKind: 125,
+        straightFlush: 250,
+        royalFlush: 4000
+    };
+
+    if (coin === 1) {
+        return oneCoinPayScale;
+    }
+    if (coin === 2) {
+        return twoCoinPayScale;
+    }
+    if (coin === 3) {
+        return threeCoinPayScale;
+    }
+    if (coin === 4) {
+        return fourCoinPayScale;
+    }
+    if (coin === 5) {
+        return fiveCoinPayScale;
+    }
+}
+
+function playGame(balance, coin) {
     const newDeck = [];
     const newHand = [];
     var payout = 0;
@@ -139,23 +205,23 @@ function playGame(balance) {
     deal(newDeck, newHand);
     const heldCards = holdStrategy(newHand);
     draw(newDeck, heldCards);
-    payout = checkHand(heldCards);
+    payout = checkHand(heldCards, coin);
     return payout;
 }
 
-function simulation(n) {
+function simulation(n, coin) {
     var simulationBalance = 0;
     var singlePayout = 0;
     var payoutPercentage;
-    var coinsSpent = (n * 5);
+    var coinsSpent = (n * coin);
 
     for (let i = 0; i < n; i += 1) {
-        simulationBalance -= 5;
-        singlePayout = playGame(simulationBalance);
+        simulationBalance -= coin;
+        singlePayout = playGame(simulationBalance, coin);
         simulationBalance += singlePayout;
     }
     payoutPercentage = (simulationBalance + coinsSpent) / (coinsSpent) * 100;
-    return payoutPercentage + '%';
+    return [payoutPercentage + '%', simulationBalance];
 }
 
 function checkOne(hand) {
