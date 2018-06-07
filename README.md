@@ -6,4 +6,4 @@ There is an article found on Wizard of Odds written by Michael Shackleford (http
 
 This demonstration seeks to test Shackleford's simple strategy by simulating the use of his algorithm over multiple iterations in accordance to the law of large numbers.
 
-The pay table that is used in this simulation can be found on Casino News Daily (http://www.casinonewsdaily.com/video-poker-guide/pay-charts-video-poker/). Because the payout for a royal flush is disproportionately higher when betting 5 coins, the simulation will use the 5-coin pay scale.
+The pay table that is used in this simulation can be found on Casino News Daily (http://www.casinonewsdaily.com/video-poker-guide/pay-charts-video-poker/). Because the payout for a royal flush is disproportionately higher when betting 5 coins, it is suggested that the simulation be run using the 5-coin pay scale.
