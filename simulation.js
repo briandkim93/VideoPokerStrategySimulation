@@ -64,7 +64,21 @@ function holdStrategy(hand) {
     if (checkTen(hand)) {
         return checkTen(hand);
     }
-    return [];
+    if (checkEleven(hand)) {
+        return checkEleven(hand);
+    }
+    if (checkTwelve(hand)) {
+        return checkTwelve(hand);
+    }
+    if (checkThirteen(hand)) {
+        return checkThirteen(hand);
+    }
+    if (checkFourteen(hand)) {
+        return checkFourteen(hand);
+    }
+    if (checkFifteen(hand)) {
+        return checkFifteen(hand);
+    }
 }
 
 function checkHand(hand) {
@@ -189,11 +203,7 @@ function checkFour(hand) {
     const maxSuitOccurrence = maxSuit(hand).maxSuitOccurrence;
 
     if (maxSuit(hand).maxSuitOccurrence === 4) {
-        for (let i = 0; i < hand.length; i += 1) {
-            if (hand[i].suit != maxSuitInHand) {
-                hand.splice(i, 1);
-            }
-        }
+        hand = hand.filter(function(card){return card.suit === maxSuitInHand;});
         for (let i = 1; i <= 9; i += 1) {
             const straightArray = [i, i + 1, i + 2, i + 3, i + 4];
         if (intersection(hand.map(card => card.number), straightArray).length === 4) {
@@ -265,18 +275,9 @@ function checkEight(hand) {
 
 function checkNine(hand) {
     if (checkLowPair(hand)) {
-        const elementCountObject = elementCounter(hand.map(card => card.number));
-        var heldCards = hand;
-        for (number in elementCountObject) {
-            if (elementCountObject[number] === 1) {
-                var toDiscard = parseInt(number);
-                heldCards = heldCards.filter(function(card){return card.number !== toDiscard;});
-            }
-        }
-        return heldCards;
-    } else {
-        return false;
+        return checkLowPair(hand);
     }
+    return false;
 }
 
 function checkTen(hand) {
@@ -287,20 +288,78 @@ function checkTen(hand) {
     }
 }
 
-function checkLowPair(hand) {
-    const handNumbers = hand.map(card => card.number);
-    const elementCountArray = Object.values(elementCounter(handNumbers));
-    if (elementCountArray.filter(function(count){return count === 2}).length === 1) {
-        const handNumbersString = handNumbers.toString();
-        for (let i = 2; i < 11; i += 1) {
-            if (handNumbersString.includes(i + ',' + i)) {
-                return true;
-            }
-        }
-        return false;
+function checkEleven(hand) {
+    const heldCards = hand.filter(function(card){return (card.number === 1 || card.number >= 11)});
+    const maxSuitInHand = maxSuit(heldCards).maxSuitInHand;
+    const maxSuitOccurrence = maxSuit(heldCards).maxSuitOccurrence;    
+    if (maxSuitOccurrence === 2) {
+        return heldCards.filter((function(card){return card.suit === maxSuitInHand}));
     } else {
         return false;
     }
+}
+
+function checkTwelve(hand) {
+    const maxSuitInHand = maxSuit(hand).maxSuitInHand;
+    const maxSuitOccurrence = maxSuit(hand).maxSuitOccurrence;
+    if (maxSuit(hand).maxSuitOccurrence === 3) {
+        hand = hand.filter(function(card){return card.suit === maxSuitInHand;});
+        for (let i = 1; i <= 9; i += 1) {
+            const straightArray = [i, i + 1, i + 2, i + 3, i + 4];
+            if (intersection(hand.map(card => card.number), straightArray).length === 3) {
+                return hand;
+            }
+        }
+    }
+    return false;
+}
+
+function checkThirteen(hand) {
+    var heldCards = hand.filter(function(card){return (card.number === 1 || card.number >= 11)});
+    heldCards = sortHand(heldCards);
+    if (heldCards.length >= 2) {
+        if (heldCards[0].number === 1) {
+            heldCards.push(heldCards.shift());
+        }
+        return heldCards.slice(0, 2);
+    }
+    return false;
+}
+
+function checkFourteen(hand) {
+    const heldCards = hand.filter(function(card){return card.number >= 10;});
+    const sortedHeldCards = sortHand(heldCards);
+    const maxSuitObject = maxSuit(sortedHeldCards);
+    if (sortedHeldCards.length > 0 && sortedHeldCards[0].number === 10 && sortedHeldCards[0].suit === maxSuitObject.maxSuitInHand && maxSuitObject.maxSuitOccurrence === 2) {
+        return sortedHeldCards;
+    }
+    return false;
+}
+
+function checkFifteen(hand) {
+    const sortedHand = sortHand(hand);
+    if (sortedHand[0].number === 1) {
+        sortedHand.push(sortedHand.shift());
+    }
+    const highCard = sortedHand.pop();
+    if (highCard.number === 1 || highCard.number >= 11) {
+        return [highCard];
+    } else {
+        return [];
+    }
+}
+
+function checkLowPair(hand) {
+    const handNumbers = hand.map(card => card.number);
+    const elementCountObject = elementCounter(handNumbers);
+    for (number in elementCountObject) {
+        if (elementCountObject[number] === 2) {
+            const lowPairNumber = parseInt(number);
+            const heldCards = hand.filter(function(card){return card.number === lowPairNumber});
+            return heldCards;
+        }
+    }
+    return false;
 }
 
 function checkHighPair(hand) {
