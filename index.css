@@ -1,0 +1,36 @@
+html body {
+    width: 100%;
+}
+
+h1 {
+    margin: 0 auto;
+    text-align: center;
+    max-width: 50%;
+}
+
+#pay-table {
+    width: 100%;
+    margin: 2% auto;
+    text-align: center;
+}
+
+img {
+    max-width: 100%;
+}
+
+#iteration-query {
+    margin: 0 auto;
+}
+
+input[type="radio"] {
+    margin-right: 20px;
+}
+
+#iterations {
+    text-align: center;
+}
+
+p {
+    margin: 1% auto;
+    text-align: center;
+}
